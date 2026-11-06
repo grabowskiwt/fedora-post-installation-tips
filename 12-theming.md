@@ -11,9 +11,10 @@
 
 2. **Install Tela-Circle Icon Theme (Green):**
    ```shell
-   git clone https://github.com/vinceliuice/Tela-circle-icon-theme.git /tmp/Tela-circle-icon-theme
-   sudo /tmp/Tela-circle-icon-theme/install.sh -c green -d /usr/share/icons
-   rm -rf /tmp/Tela-circle-icon-theme
+   theme_tmp="$(mktemp -d)"
+   trap 'rm -rf "$theme_tmp"' EXIT
+   git clone --depth 1 https://github.com/vinceliuice/Tela-circle-icon-theme.git "$theme_tmp/Tela-circle-icon-theme"
+   "$theme_tmp/Tela-circle-icon-theme/install.sh" -c green -d "$HOME/.local/share/icons"
    ```
 
 3. **Configure GTK Appearance and Desktop Preferences:**

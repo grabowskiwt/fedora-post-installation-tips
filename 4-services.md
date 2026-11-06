@@ -13,6 +13,12 @@ necessarily consume significant CPU time or battery power.
   sudo systemctl disable --now abrtd.service abrt-oops.service abrt-xorg.service abrt-journal-core.service
   ```
 * **Disable Cellular Modems & Smart Cards:**
+
+  Do not disable `pcscd` if you use a smart card, including a YubiKey's
+  PIV, OpenPGP, or OATH interface. FIDO2/WebAuthn security-key
+  authentication uses a different interface and does not require
+  `pcscd`.
+
   ```shell
   sudo systemctl disable --now ModemManager.service pcscd.socket pcscd.service
   ```
