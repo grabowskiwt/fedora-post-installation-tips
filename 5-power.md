@@ -193,7 +193,7 @@ in `/etc/tlp.conf`:
 ```ini
 CPU_BOOST_ON_AC=1
 CPU_BOOST_ON_BAT=1
-CPU_BOOST_ON_SAV=1
+CPU_BOOST_ON_SAV=0
 ```
 
 Apply the configuration:
