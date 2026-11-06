@@ -31,11 +31,11 @@ sudo dnf install -y curl unzip fontconfig
   sudo fc-cache -f
   ```
 
-## kmscon Font Family and Size
+## kmscon Font Family, Size and Colorssheme
 
-Install kmscon and its FreeType font backend:
+Install kmscon FreeType font backend:
 ```shell
-sudo dnf install kmscon kmscon-freetype freetype fontconfig
+sudo dnf install kmscon-freetype freetype fontconfig
 ```
 
 After installing the fonts above, check the exact font family:
@@ -54,6 +54,36 @@ preserving any other existing settings:
 font-engine=freetype
 font-name=JetBrainsMono Nerd Font Mono
 font-size=18
+
+# Gruvbox
+palette=custom
+
+palette-foreground=235,219,178
+palette-background=40,40,40
+
+# regular0-7
+palette-black=40,40,40
+palette-red=204,36,29
+palette-green=104,157,106
+palette-yellow=214,93,14
+palette-blue=69,133,136
+palette-magenta=177,98,134
+palette-cyan=152,151,26
+palette-light-grey=168,153,132
+
+# bright0-7
+palette-dark-grey=146,131,116
+palette-light-red=251,73,52
+palette-light-green=142,192,124
+palette-light-yellow=254,128,25
+palette-light-blue=131,165,152
+palette-light-magenta=211,134,155
+palette-light-cyan=184,187,38
+palette-white=235,219,178
+
+# Opcjonalnie: czcionka
+font-name=JetBrainsMono Nerd Font Mono
+font-size=16
 ```
 
 `font-name` selects the font family. `font-size` sets its height in
