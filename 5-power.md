@@ -197,7 +197,27 @@ This example requires a writable Intel RAPL CPU package interface.
 For AMD or other hardware, use the interface supported by that CPU.
 The example 10/15 W limits apply on both battery and AC power; select
 values appropriate for your processor before enabling the service.
-First confirm the RAPL zone and constraint names as described below.
+This limits CPU package power, not the entire laptop's power consumption.
+Values are in microwatts; 10/15 W are examples, not manufacturer
+recommendations. Compare responsiveness, task completion time, temperature,
+and battery discharge rate with your chosen limits.
+
+First inspect the available RAPL zones and constraints:
+```shell
+for zone in /sys/class/powercap/intel-rapl:*; do
+  [ -f "$zone/name" ] || continue
+  printf '\n%s: ' "$zone"
+  cat "$zone/name"
+  for constraint in "$zone"/constraint_*_name; do
+    [ -f "$constraint" ] || continue
+    printf '%s: ' "$constraint"
+    cat "$constraint"
+  done
+done
+```
+
+For the following example, confirm that `intel-rapl:0` is the CPU
+package, constraint 0 is `long_term`, and constraint 1 is `short_term`.
 
 Before enabling the persistent service, record your original limits:
 ```shell
@@ -257,53 +277,6 @@ sudo chmod -x /usr/lib/systemd/system-sleep/laptop-power-limits
 Disabling the service does not restore the previous power limits.
 Write the recorded original values back to the corresponding sysfs
 files, or reboot after disabling both automatic mechanisms.
-
-## Laptop CPU Power Limits (Optional, Intel RAPL Example)
-
-Instead of disabling Turbo Boost, test a lower CPU package power limit.
-This limits the CPU package, not the entire laptop's power consumption.
-
-First inspect the available RAPL zones and constraints:
-```shell
-for zone in /sys/class/powercap/intel-rapl:*; do
-  [ -f "$zone/name" ] || continue
-  printf '\n%s: ' "$zone"
-  cat "$zone/name"
-  for constraint in "$zone"/constraint_*_name; do
-    [ -f "$constraint" ] || continue
-    printf '%s: ' "$constraint"
-    cat "$constraint"
-  done
-done
-```
-
-For the following example, confirm that `intel-rapl:0` is the CPU
-package, constraint 0 is `long_term`, and constraint 1 is `short_term`.
-Record the original limits:
-```shell
-cat /sys/class/powercap/intel-rapl:0/constraint_0_power_limit_uw
-cat /sys/class/powercap/intel-rapl:0/constraint_1_power_limit_uw
-```
-
-On battery, try 10 W sustained and 15 W short-term as an initial
-experiment, only if both values are below the original limits:
-```shell
-echo 0 | sudo tee /sys/devices/system/cpu/intel_pstate/no_turbo
-echo 10000000 | sudo tee /sys/class/powercap/intel-rapl:0/constraint_0_power_limit_uw
-echo 15000000 | sudo tee /sys/class/powercap/intel-rapl:0/constraint_1_power_limit_uw
-```
-
-Values are in microwatts. These are trial values, not manufacturer
-recommendations. Compare responsiveness, task completion time,
-temperature, and battery discharge rate before making them permanent.
-
-Read the limits again after applying them and after suspend/resume.
-Firmware or thermal management software may change them.
-The manual commands above are temporary. Use the persistent setup
-section to reapply the limits automatically after boot and resume.
-
-To undo the test, write the recorded original values back to the
-same files.
 
 ## Laptop Fan Control (Optional, Compatible Hardware Only)
 
