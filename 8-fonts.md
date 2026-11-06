@@ -80,10 +80,6 @@ palette-light-blue=131,165,152
 palette-light-magenta=211,134,155
 palette-light-cyan=184,187,38
 palette-white=235,219,178
-
-# Opcjonalnie: czcionka
-font-name=JetBrainsMono Nerd Font Mono
-font-size=16
 ```
 
 `font-name` selects the font family. `font-size` sets its height in
