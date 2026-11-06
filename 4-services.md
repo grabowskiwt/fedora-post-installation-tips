@@ -14,7 +14,7 @@ necessarily consume significant CPU time or battery power.
   ```
 * **Disable Cellular Modems & Smart Cards:**
   ```shell
-  sudo systemctl disable --now ModemManager.service pcscd.service
+  sudo systemctl disable --now ModemManager.service pcscd.socket pcscd.service
   ```
 * **Disable PackageKit (Optional):**
 
