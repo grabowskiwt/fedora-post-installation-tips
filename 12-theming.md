@@ -12,9 +12,9 @@
 2. **Install Tela-Circle Icon Theme (Green):**
    ```shell
    theme_tmp="$(mktemp -d)"
-   trap 'rm -rf "$theme_tmp"' EXIT
    git clone --depth 1 https://github.com/vinceliuice/Tela-circle-icon-theme.git "$theme_tmp/Tela-circle-icon-theme"
    "$theme_tmp/Tela-circle-icon-theme/install.sh" -c green -d "$HOME/.local/share/icons"
+   rm -rf -- "$theme_tmp"
    ```
 
 3. **Configure GTK Appearance and Desktop Preferences:**
@@ -60,7 +60,7 @@
    flatpak install flathub org.kde.KStyle.Adwaita
    flatpak override --user --env=XCURSOR_THEME=breeze_cursors
    flatpak override --user --env=XCURSOR_SIZE=32
-   flatpak override --user --filesystem=/usr/share/icons:ro
+   flatpak override --user --filesystem=xdg-data/icons:ro
    flatpak override --user --filesystem=xdg-config/gtk-3.0:ro
    flatpak override --user --filesystem=xdg-config/gtk-4.0:ro
    flatpak override --user --filesystem=xdg-config/qt5ct:ro

@@ -56,6 +56,8 @@ tuned-adm list
 
 Desktop profile names are mapped to TuneD profiles through
 `/etc/tuned/ppd.conf`.
+Mappings and power use can vary by TuneD version and hardware; compare
+the available profiles with a repeatable workload on your own system.
 
 ## Option 2: Replace TuneD with TLP
 
@@ -69,6 +71,12 @@ Desktop profile names are mapped to TuneD profiles through
    `tlp-pd` enables desktop profile switching; `tlp-rdw` enables automatic
    radio device switching. Both packages are optional.
 
+   TLP's defaults are a reasonable starting point for battery use:
+   `balance_power` for the CPU energy policy and `balanced` for the
+   platform profile, when supported by the hardware. `low-power` is the
+   default platform profile for TLP's `SAV` profile, not its normal
+   battery profile. Measure any additional changes on your own system.
+
 2. **Enable TLP and Desktop Profile Switching:**
    ```shell
    sudo systemctl enable --now tlp.service
@@ -79,6 +87,8 @@ Desktop profile names are mapped to TuneD profiles through
    ```shell
    sudo systemctl mask systemd-rfkill.service systemd-rfkill.socket
    ```
+   TLP recommends this to avoid conflicts with radio-device state
+   handling. It is especially relevant when using `tlp-rdw`.
 
 ## Avoid Conflicting Power Management Tools
 
@@ -98,7 +108,9 @@ Reference: [TLP conflicts](https://linrunner.de/tlp/faq/conflicts.html).
 ## Thermal Management with thermald (Optional)
 
 On supported Intel laptops and PCs, thermald manages temperature.
-It complements TLP; it does not replace power-saving settings.
+It is an optional thermal-management tool, not a battery-life
+optimization by itself. It complements TLP; it does not replace
+power-saving settings.
 
 Install and enable it:
 ```shell
@@ -193,8 +205,11 @@ sudo tlp start
 
 This example requires a writable Intel RAPL CPU package interface.
 For AMD or other hardware, use the interface supported by that CPU.
-The example 10/15 W limits apply on both battery and AC power; select
-values appropriate for your processor before enabling the service.
+The example 10/15 W limits apply on both battery and AC power. They can
+reduce performance under heavy load while plugged in; select values
+appropriate for your processor before enabling the service. To use
+different limits on battery and AC, configure and test a separate
+power-source-aware rule.
 This limits CPU package power, not the entire laptop's power consumption.
 Values are in microwatts; 10/15 W are examples, not manufacturer
 recommendations. Compare responsiveness, task completion time, temperature,

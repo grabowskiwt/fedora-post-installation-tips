@@ -4,7 +4,7 @@
 
 # 8. System Fonts Setup
 
-Install essential developer and system fonts (`JetBrainsMono Nerd Font` and `IBM Plex Sans`):
+Install essential developer and system fonts (`JetBrainsMono Nerd Font` and the IBM Plex family):
 
 Both font downloads use pinned releases for reproducible installs.
 Update the version in each URL when intentionally refreshing the fonts.
@@ -21,11 +21,11 @@ sudo dnf install curl unzip fontconfig
   rm -f /tmp/jb_font.zip
   ```
 
-* **IBM Plex Sans (v6.4.0):**
+* **IBM Plex family (v6.4.0):**
   ```shell
-  sudo mkdir -p /usr/share/fonts/IBMPlexSans
+  sudo mkdir -p /usr/share/fonts/IBMPlex
   curl -L "https://github.com/IBM/plex/releases/download/v6.4.0/OpenType.zip" -o /tmp/ibm_font.zip
-  sudo unzip -o /tmp/ibm_font.zip -d /usr/share/fonts/IBMPlexSans
+  sudo unzip -o /tmp/ibm_font.zip -d /usr/share/fonts/IBMPlex
   rm -f /tmp/ibm_font.zip
   ```
 
