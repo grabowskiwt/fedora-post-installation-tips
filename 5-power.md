@@ -98,6 +98,37 @@ suspend settings; these are not managed by TLP.
 
 Reference: [TLP conflicts](https://linrunner.de/tlp/faq/conflicts.html).
 
+## Thermal Management with thermald (Optional)
+
+On supported Intel laptops and PCs, thermald manages temperature.
+It complements TLP; it does not replace power-saving settings.
+
+Install and enable it:
+```shell
+sudo dnf install thermald
+sudo systemctl enable --now thermald.service
+```
+
+Check its status and startup messages:
+```shell
+systemctl status thermald.service --no-pager
+journalctl -u thermald.service -b --no-pager
+```
+
+If the log reports unsupported hardware or firmware-managed thermal
+control, do not force thermald to run.
+
+When using custom CPU power limits, verify them under load with
+thermald active, since thermal management may adjust power limits.
+
+To disable it:
+```shell
+sudo systemctl disable --now thermald.service
+```
+
+References: [Fedora thermald package](https://packages.fedoraproject.org/pkgs/thermald/thermald/)
+and [TLP compatibility](https://linrunner.de/tlp/faq/conflicts.html).
+
 ## Battery Charge Limits (Optional, TLP)
 
 Charge limits reduce battery wear; they do not increase runtime per
