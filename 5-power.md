@@ -138,12 +138,12 @@ and [hardware-specific support](https://linrunner.de/tlp/settings/bc-vendors.htm
 ## Quiet Laptop Setup: TLP, Power Limits and thinkfan
 
 Use TuneD and tuned-ppd for the desktop PC.
-For the ThinkPad T490 laptop, choose the TLP installation above
-instead of TuneD.
+For a laptop, choose the TLP installation above instead of TuneD.
 
-In my tests on the Intel Core i5-8365U, thinkfan was quieter than
-firmware control with Turbo Boost enabled and 10/15 W package limits.
-Both fan configurations reached a peak CPU temperature of 63°C.
+In my tests, a custom fan curve was quieter than firmware control.
+Results depend on the laptop, cooling system, and workload.
+The 10/15 W limits and fan curve below are examples to adapt and test,
+not universal settings for every laptop.
 The tests used TuneD Balanced; the complete TLP setup still requires
 verification.
 
@@ -160,9 +160,12 @@ Apply the configuration:
 sudo tlp start
 ```
 
-### Persist the 10/15 W Power Limits
+### Persist Laptop CPU Power Limits (Intel RAPL Example)
 
-These limits apply on both battery and AC power.
+This example requires a writable Intel RAPL CPU package interface.
+For AMD or other hardware, use the interface supported by that CPU.
+The example 10/15 W limits apply on both battery and AC power; select
+values appropriate for your processor before enabling the service.
 First confirm the RAPL zone and constraint names as described below.
 
 Before enabling the persistent service, record your original limits:
@@ -171,10 +174,10 @@ cat /sys/class/powercap/intel-rapl:0/constraint_0_power_limit_uw
 cat /sys/class/powercap/intel-rapl:0/constraint_1_power_limit_uw
 ```
 
-Create `/etc/systemd/system/t490-power-limits.service`:
+Create `/etc/systemd/system/laptop-power-limits.service`:
 ```ini
 [Unit]
-Description=Apply ThinkPad T490 CPU package power limits
+Description=Apply laptop CPU package power limits
 After=tlp.service
 
 [Service]
@@ -188,19 +191,19 @@ ExecStart=/bin/sh -ec 'echo 10000000 > /sys/class/powercap/intel-rapl:0/constrai
 WantedBy=multi-user.target
 ```
 
-Create `/usr/lib/systemd/system-sleep/t490-power-limits`:
+Create `/usr/lib/systemd/system-sleep/laptop-power-limits`:
 ```sh
 #!/bin/sh
 if [ "$1" = post ]; then
-    /usr/bin/systemctl --no-block restart t490-power-limits.service
+    /usr/bin/systemctl --no-block restart laptop-power-limits.service
 fi
 ```
 
 Enable the resume hook and startup service:
 ```shell
-sudo chmod 755 /usr/lib/systemd/system-sleep/t490-power-limits
+sudo chmod 755 /usr/lib/systemd/system-sleep/laptop-power-limits
 sudo systemctl daemon-reload
-sudo systemctl enable --now t490-power-limits.service
+sudo systemctl enable --now laptop-power-limits.service
 ```
 
 Verify after installation, reboot, and suspend/resume:
@@ -216,15 +219,15 @@ Firmware may still override limits, so verify them.
 
 To remove automatic power limiting:
 ```shell
-sudo systemctl disable --now t490-power-limits.service
-sudo chmod -x /usr/lib/systemd/system-sleep/t490-power-limits
+sudo systemctl disable --now laptop-power-limits.service
+sudo chmod -x /usr/lib/systemd/system-sleep/laptop-power-limits
 ```
 
 Disabling the service does not restore the previous power limits.
 Write the recorded original values back to the corresponding sysfs
 files, or reboot after disabling both automatic mechanisms.
 
-## CPU Power Limits on ThinkPad T490 (Optional)
+## Laptop CPU Power Limits (Optional, Intel RAPL Example)
 
 Instead of disabling Turbo Boost, test a lower CPU package power limit.
 This limits the CPU package, not the entire laptop's power consumption.
@@ -271,7 +274,12 @@ section to reapply the limits automatically after boot and resume.
 To undo the test, write the recorded original values back to the
 same files.
 
-## Fan Control on ThinkPad T490 with Intel Graphics (Optional)
+## Laptop Fan Control (Optional, Compatible Hardware Only)
+
+This example requires the thinkpad_acpi fan interface and a coretemp
+CPU package sensor. It is not a universal laptop fan configuration.
+On other hardware, use a supported fan-control interface or firmware
+control. Include dedicated GPU sensors when the cooling system is shared.
 
 First test the CPU power limits with firmware-controlled cooling.
 If fan behavior is still unsatisfactory, try thinkfan:

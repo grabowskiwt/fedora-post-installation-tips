@@ -34,8 +34,8 @@ install libavcodec-freeworld; it complements Fedora's ffmpeg-free.
 ### Hardware Acceleration
 Enable hardware-level decoding to save CPU usage and battery life.
 
-Follow only the subsection matching your GPU. For the ThinkPad T490
-with Intel graphics, use the modern Intel subsection.
+Follow only the subsection matching your GPU, on either a laptop or
+desktop PC. Choose the Intel driver according to the GPU generation.
 
 #### **AMD (Mesa):**
 ```shell
