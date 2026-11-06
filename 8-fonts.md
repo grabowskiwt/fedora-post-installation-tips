@@ -7,7 +7,7 @@
 Install essential developer and system fonts (`JetBrainsMono Nerd Font` and `IBM Plex Sans`):
 
 ```shell
-sudo dnf install -y curl unzip fontconfig
+sudo dnf install curl unzip fontconfig
 ```
 
 * **JetBrainsMono Nerd Font:**
@@ -31,12 +31,16 @@ sudo dnf install -y curl unzip fontconfig
   sudo fc-cache -f
   ```
 
-## kmscon Font Family, Size and Colorssheme
+## kmscon Font Family, Size and Color Scheme
 
-Install kmscon FreeType font backend:
+Fedora 45 installs `kmscon` by default and uses it for virtual
+terminals. Install its FreeType font backend and font tools:
 ```shell
 sudo dnf install kmscon-freetype freetype fontconfig
 ```
+
+If `rpm -q kmscon` reports that the base package is missing, add
+`kmscon` to the install command.
 
 After installing the fonts above, check the exact font family:
 ```shell
@@ -81,6 +85,9 @@ palette-light-magenta=211,134,155
 palette-light-cyan=184,187,38
 palette-white=235,219,178
 ```
+
+This Gruvbox variant swaps the green and cyan color assignments and
+uses orange in place of yellow.
 
 `font-name` selects the font family. `font-size` sets its height in
 pixels; increase it for larger text or decrease it for smaller text.

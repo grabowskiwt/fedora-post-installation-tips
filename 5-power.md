@@ -89,12 +89,9 @@ power-profiles-daemon, or auto-cpufreq.
 `tlp-pd` is designed to work with TLP and provides desktop profile
 switching.
 
-`thermald` manages temperature and does not conflict with TLP.
-If it is already working on supported hardware, keep it enabled.
-TLP does not replace it.
-
-Keep KDE's power management enabled for screen brightness and
-suspend settings; these are not managed by TLP.
+TuneD and TLP do not manage display brightness or suspend policy.
+Configure those through your desktop environment or compositor, such
+as Sway.
 
 Reference: [TLP conflicts](https://linrunner.de/tlp/faq/conflicts.html).
 
@@ -175,8 +172,9 @@ In my tests, a custom fan curve was quieter than firmware control.
 Results depend on the laptop, cooling system, and workload.
 The 10/15 W limits and fan curve below are examples to adapt and test,
 not universal settings for every laptop.
-The tests used TuneD Balanced; the complete TLP setup still requires
-verification.
+The power and fan measurements below were taken with TuneD Balanced
+active. They are not measurements of the TLP configuration described
+above; verify that setup separately on your laptop.
 
 Allow Turbo Boost in all TLP profiles by setting these values
 in `/etc/tlp.conf`:
@@ -346,7 +344,9 @@ sudo thinkfan -n -c /etc/thinkfan.yaml
 
 Monitor temperatures and fan speed with `sensors` in another terminal,
 both at idle and during your normal heavy workloads.
-After a successful test, stop the foreground process with Ctrl+C:
+After observing the fan and temperatures at idle and under load, stop
+the foreground process with Ctrl+C. If the curve behaves safely and
+quietly, enable the service in a separate command:
 ```shell
 sudo systemctl enable --now thinkfan.service
 ```

@@ -1,4 +1,4 @@
-[< Previous: DNF Optimization](1-dnf.md) | [Next: Devario Kernel & Schedulers >](3-devario-kernel.md)
+[< Previous: DNF Optimization](1-dnf.md) | [Next: Devario Kernel & SCX Scheduler >](3-devario-kernel.md)
 
 ---
 
@@ -88,4 +88,4 @@ sudo dnf install gstreamer1-plugin-openh264 mozilla-openh264
 
 ---
 
-[< Previous: DNF Optimization](1-dnf.md) | [Next: Devario Kernel & Schedulers >](3-devario-kernel.md)
+[< Previous: DNF Optimization](1-dnf.md) | [Next: Devario Kernel & SCX Scheduler >](3-devario-kernel.md)

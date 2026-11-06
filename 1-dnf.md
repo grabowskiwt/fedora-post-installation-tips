@@ -1,4 +1,4 @@
-[< Previous: Systemd-boot & Secure Boot Setup](0-secure-boot-systemd.md) | [Next: Additional Repositories & Codecs >](2-repositories-and-codecs.md)
+[< Previous: Secure Boot for an Existing systemd-boot Installation](0-secure-boot-systemd.md) | [Next: Additional Repositories & Codecs >](2-repositories-and-codecs.md)
 
 ---
 
@@ -28,4 +28,4 @@ sudo dnf clean metadata
 
 ---
 
-[< Previous: Systemd-boot & Secure Boot Setup](0-secure-boot-systemd.md) | [Next: Additional Repositories & Codecs >](2-repositories-and-codecs.md)
+[< Previous: Secure Boot for an Existing systemd-boot Installation](0-secure-boot-systemd.md) | [Next: Additional Repositories & Codecs >](2-repositories-and-codecs.md)

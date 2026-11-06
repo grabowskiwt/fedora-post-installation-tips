@@ -1,6 +1,6 @@
 # Fedora Post-Installation Tips & Optimization Guide
 
-After installing Fedora, there are several steps you can take to further enhance the functionality, performance, and usability of your system. This repository provides a comprehensive ultimate guide covering DNF optimization, RPM Fusion codecs, hardware acceleration, custom Devario kernels, SCX schedulers, background service tuning, TuneD and TLP power management, Systemd-boot & Secure Boot (`sbctl`), KDE speedups, fonts, Zsh setup, and system theming.
+After installing Fedora, there are several steps you can take to further enhance the functionality, performance, and usability of your system. This repository provides a guide to DNF optimization, RPM Fusion codecs, hardware acceleration, the Devario kernel and SCX scheduler, background services, TuneD and TLP power management, Secure Boot with `sbctl`, fonts, Zsh, and system theming. KDE-specific guidance is kept in an optional final chapter.
 
 ## Scope
 
@@ -22,16 +22,16 @@ in my dotfiles repository.
 
 Apply only the sections relevant to your hardware and chosen setup.
 
-[Next: Systemd-boot & Secure Boot Setup >](0-secure-boot-systemd.md)
+[Next: Secure Boot for an Existing systemd-boot Installation >](0-secure-boot-systemd.md)
 
 ---
 
 ## Contents / Table of Contents
 
-0. [Systemd-boot & Secure Boot Setup (`sbctl`)](0-secure-boot-systemd.md)
+0. [Secure Boot for an Existing systemd-boot Installation (`sbctl`)](0-secure-boot-systemd.md)
 1. [DNF Optimization](1-dnf.md)
 2. [Additional Repositories & Codecs](2-repositories-and-codecs.md)
-3. [Custom Kernel (Devario Kernel) & Schedulers (`rusty`)](3-devario-kernel.md)
+3. [Devario Kernel & SCX Scheduler](3-devario-kernel.md)
 4. [Background Services Optimization](4-services.md)
 5. [Power Management Configuration (TuneD or TLP)](5-power.md)
 6. [Firmware Updates](6-firmware.md)
@@ -52,4 +52,4 @@ Apply only the sections relevant to your hardware and chosen setup.
 
 ---
 
-[Next: Systemd-boot & Secure Boot Setup >](0-secure-boot-systemd.md)
+[Next: Secure Boot for an Existing systemd-boot Installation >](0-secure-boot-systemd.md)

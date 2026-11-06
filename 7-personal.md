@@ -13,6 +13,10 @@ Set hardware clock to UTC:
 ```shell
 sudo timedatectl set-local-rtc '0'
 ```
+This is recommended for Linux. If you dual-boot Windows and Windows
+uses local time for the hardware clock, the displayed time may shift
+after switching operating systems. Configure Windows to use UTC or
+skip this step on a dual-boot system.
 
 Disable terminal bell (pcspkr):
 ```shell

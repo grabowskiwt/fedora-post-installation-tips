@@ -4,25 +4,23 @@
 
 # 10. Zsh Shell & Plugins Setup
 
-1. **Install Zsh, Git, and Fzf:**
+1. **Install Zsh, Fzf, and the Plugins:**
    ```shell
-   sudo dnf install -y zsh git fzf
+   sudo dnf install zsh fzf zsh-autosuggestions zsh-syntax-highlighting
    ```
 
-2. **Setup Zsh Custom Directory & Plugins:**
+2. **Load the Plugins from Your Zsh Configuration:**
+
+   Installing the Fedora packages does not automatically load the
+   plugins. Add their source commands to your `.zshrc`, which is
+   maintained in your dotfiles repository. Load
+   `zsh-autosuggestions` before `zsh-syntax-highlighting`; syntax
+   highlighting should be sourced last so it can wrap the configured
+   Zsh widgets. Add these lines after your other interactive Zsh
+   setup, with syntax highlighting last:
    ```shell
-   ZSH_CUSTOM="${ZSH_CUSTOM:-$HOME/.zsh}"
-   mkdir -p "$ZSH_CUSTOM"
-
-   # Install zsh-autosuggestions
-   if [ ! -d "$ZSH_CUSTOM/zsh-autosuggestions" ]; then
-     git clone --depth 1 "https://github.com/zsh-users/zsh-autosuggestions" "$ZSH_CUSTOM/zsh-autosuggestions"
-   fi
-
-   # Install zsh-syntax-highlighting
-   if [ ! -d "$ZSH_CUSTOM/zsh-syntax-highlighting" ]; then
-     git clone --depth 1 "https://github.com/zsh-users/zsh-syntax-highlighting" "$ZSH_CUSTOM/zsh-syntax-highlighting"
-   fi
+   source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+   source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
    ```
 
 3. **Change Default Shell to Zsh:**

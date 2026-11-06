@@ -2,10 +2,14 @@
 
 ---
 
-# 3. Custom Kernel (Devario Kernel by Sirlucjan) & Schedulers (`rusty`)
+# 3. Devario Kernel & SCX Scheduler
 
 This section is optional. Keep a standard Fedora kernel installed
 and available in the boot menu as a fallback.
+
+If Secure Boot is enabled with `sbctl`, follow the signing instructions
+in [chapter 0](0-secure-boot-systemd.md) for each newly installed
+Devario kernel before booting it.
 
 Before switching, measure responsiveness, task completion time, and
 battery discharge with the standard kernel. Compare under the same

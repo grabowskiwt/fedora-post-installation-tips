@@ -1,4 +1,4 @@
-[< Previous: Custom Kernel & Schedulers](3-devario-kernel.md) | [Next: Power Management Configuration >](5-power.md)
+[< Previous: Devario Kernel & SCX Scheduler](3-devario-kernel.md) | [Next: Power Management Configuration >](5-power.md)
 
 ---
 
@@ -18,9 +18,10 @@ necessarily consume significant CPU time or battery power.
   ```
 * **Disable PackageKit (Optional):**
 
-  This disables PackageKit-based software management, including system
-  package updates through Discover. Keep updating RPM packages manually
-  with DNF. Wait for any active package transaction to finish first.
+  This disables PackageKit-based software management, including RPM
+  updates in KDE Discover. Keep updating RPM packages manually with
+  DNF. Wait for any active package transaction to finish first. This
+  note applies to KDE; Sway users may not have Discover installed.
 
   ```shell
   sudo systemctl mask --now packagekit.service
@@ -45,4 +46,4 @@ necessarily consume significant CPU time or battery power.
 
 ---
 
-[< Previous: Custom Kernel & Schedulers](3-devario-kernel.md) | [Next: Power Management Configuration >](5-power.md)
+[< Previous: Devario Kernel & SCX Scheduler](3-devario-kernel.md) | [Next: Power Management Configuration >](5-power.md)

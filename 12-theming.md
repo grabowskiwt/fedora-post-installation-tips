@@ -6,7 +6,7 @@
 
 1. **Install Theme & Cursor Packages:**
    ```shell
-   sudo dnf install -y adwaita-cursor-theme breeze-cursor-theme adwaita-icon-theme xdg-desktop-portal-gtk qt5ct qt6ct
+   sudo dnf install adwaita-cursor-theme breeze-cursor-theme adwaita-icon-theme xdg-desktop-portal-gtk qt5ct qt6ct
    ```
 
 2. **Install Tela-Circle Icon Theme (Green):**
