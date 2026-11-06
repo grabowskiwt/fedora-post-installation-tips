@@ -34,11 +34,13 @@ necessarily consume significant CPU time or battery power.
 ## User Services (`systemctl --user`)
 * **Disable Bluetooth File Transfer (OBEX):**
   ```shell
-  systemctl --user disable --now obex.service
+  systemctl --user mask --now obex.service dbus-org.bluez.obex.service
   ```
-* **Disable Accessibility APIs:**
+* **Disable Accessibility APIs (Optional):**
+
+  Skip this step if you use a screen reader or other accessibility tools.
   ```shell
-  systemctl --user disable --now at-spi-dbus-bus.service
+  systemctl --user mask --now at-spi-dbus-bus.service
   ```
 
 ---
