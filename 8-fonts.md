@@ -31,6 +31,39 @@ sudo dnf install -y curl unzip fontconfig
   sudo fc-cache -f
   ```
 
+## kmscon Font Family and Size
+
+Install kmscon and its FreeType font backend:
+```shell
+sudo dnf install kmscon kmscon-freetype freetype fontconfig
+```
+
+After installing the fonts above, check the exact font family:
+```shell
+fc-match 'JetBrainsMono Nerd Font Mono'
+```
+
+Create the configuration directory:
+```shell
+sudo mkdir -p /etc/kmscon
+```
+
+Add or update these options in `/etc/kmscon/kmscon.conf`,
+preserving any other existing settings:
+```ini
+font-engine=freetype
+font-name=JetBrainsMono Nerd Font Mono
+font-size=18
+```
+
+`font-name` selects the font family. `font-size` sets its height in
+pixels; increase it for larger text or decrease it for smaller text.
+Use an installed monospace font.
+
+The changes apply to newly started kmscon instances. Save your work
+and reboot to apply them without restarting an active console session.
+Command-line font options override settings in the configuration file.
+
 * **Troubleshoot Missing Fonts in Flatpak Applications (Optional):**
 
   Standard host font directories are normally available automatically.
