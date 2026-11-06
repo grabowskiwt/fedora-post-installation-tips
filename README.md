@@ -1,19 +1,55 @@
-# Fedora Post-Installation Tips
+# Fedora Post-Installation Tips & Optimization Guide
 
-After installing Fedora, there are several steps you can take to further enhance the functionality, performance, and usability of your system. This guide provides comprehensive instructions on various post-installation tasks. By following these steps, you can tailor your Fedora system to better suit your specific requirements and preferences, ensuring a smoother and more efficient computing experience.
+After installing Fedora, there are several steps you can take to further enhance the functionality, performance, and usability of your system. This repository provides a comprehensive ultimate guide covering DNF optimization, RPM Fusion codecs, hardware acceleration, custom Devario kernels, SCX schedulers, background service tuning, TuneD and TLP power management, Systemd-boot & Secure Boot (`sbctl`), KDE speedups, fonts, Zsh setup, and system theming.
 
-Before proceeding with the customization steps, it's important to update your system to ensure all packages are up-to-date.
+## Scope
 
-## Contents
+These instructions target Fedora Linux 45 with Sway as the primary
+desktop environment. The final KDE chapter is optional reference
+material for a future KDE setup.
 
-- [Systemd-boot Installation](systemd_boot.md)
-- [DNF Optimization](dnf_optimization.md)
-- [Additional Repositories + Codecs](additional_repositories.md)
-- [Custom Fedora Setup Guide](personal.md)
-- [KDE Optimization](kde_speedup.md)
-- [Services](services.md)
+## Recommended Power Management
+
+- **Desktop PC:** TuneD with tuned-ppd for power profile selection.
+- **Laptop:** TLP for battery-focused power management. Optional CPU
+  power limits and fan control require hardware-specific configuration
+  and testing.
+
+Choose one power management setup; do not run TuneD and TLP together.
+
+Shell configuration and swayidle settings are maintained separately
+in my dotfiles repository.
+
+Apply only the sections relevant to your hardware and chosen setup.
+
+[Next: Systemd-boot & Secure Boot Setup >](0-secure-boot-systemd.md)
+
+---
+
+## Contents / Table of Contents
+
+0. [Systemd-boot & Secure Boot Setup (`sbctl`)](0-secure-boot-systemd.md)
+1. [DNF Optimization](1-dnf.md)
+2. [Additional Repositories & Codecs](2-repositories-and-codecs.md)
+3. [Custom Kernel (Devario Kernel) & Schedulers (`rusty`)](3-devario-kernel.md)
+4. [Background Services Optimization](4-services.md)
+5. [Power Management Configuration (TuneD or TLP)](5-power.md)
+6. [Firmware Updates](6-firmware.md)
+7. [Personal Tools & Tweaks](7-personal.md)
+8. [System Fonts Setup](8-fonts.md)
+9. [Shell Color Scripts](9-colorscripts.md)
+10. [Zsh Shell & Plugins Setup](10-zsh.md)
+11. [SDDM Login Manager Configuration](11-sddm.md)
+12. [System Theming & Appearance](12-theming.md)
+13. [KDE Optimization & Speedups](13-kde.md)
+
+---
 
 ## Credits
 
 <https://github.com/odziom91/fedora-tips-and-tricks>  
 <https://rpmfusion.org/Howto>
+
+---
+
+[Next: Systemd-boot & Secure Boot Setup >](0-secure-boot-systemd.md)
