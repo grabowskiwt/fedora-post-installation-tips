@@ -188,8 +188,8 @@ The power and fan measurements below were taken with TuneD Balanced
 active. They are not measurements of the TLP configuration described
 above; verify that setup separately on your laptop.
 
-Allow Turbo Boost in all TLP profiles by setting these values
-in `/etc/tlp.conf`:
+Allow Turbo Boost on AC and battery, but keep it disabled in the
+power-saver (SAV) profile, by setting these values in `/etc/tlp.conf`:
 ```ini
 CPU_BOOST_ON_AC=1
 CPU_BOOST_ON_BAT=1
@@ -277,7 +277,9 @@ cat /sys/class/powercap/intel-rapl:0/constraint_1_power_limit_uw
 cat /sys/devices/system/cpu/intel_pstate/no_turbo
 ```
 
-Expected values: `10000000`, `15000000`, and `0` respectively.
+Expected values: `10000000`, `15000000`, and `0` respectively on AC
+and battery. In the TLP power-saver (SAV) profile, `no_turbo` is
+expected to be `1`.
 The service manages power limits; TLP manages Turbo Boost.
 Firmware may still override limits, so verify them.
 
