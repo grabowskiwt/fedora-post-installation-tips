@@ -8,10 +8,14 @@ Install terminal color scripts (`shell-color-scripts` by dwt1) into `~/.local/bi
 
 ```shell
 mkdir -p "$HOME/.local/bin"
-git clone --depth 1 "https://gitlab.com/dwt1/shell-color-scripts.git" /tmp/shell-color-scripts
-cp -r /tmp/shell-color-scripts/colorscripts/* "$HOME/.local/bin/"
-chmod +x "$HOME/.local/bin/"*
-rm -rf /tmp/shell-color-scripts
+colors_tmp="$(mktemp -d /tmp/shell-colorscripts.XXXXXX)"
+git clone --depth 1 "https://gitlab.com/dwt1/shell-color-scripts.git" "$colors_tmp/repo"
+for script in "$colors_tmp"/repo/colorscripts/*; do
+  [ -f "$script" ] || continue
+  cp "$script" "$HOME/.local/bin/"
+  chmod +x "$HOME/.local/bin/${script##*/}"
+done
+rm -rf -- "$colors_tmp"
 ```
 
 ---
