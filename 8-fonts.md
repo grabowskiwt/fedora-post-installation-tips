@@ -4,10 +4,9 @@
 
 # 8. System Fonts Setup
 
-Install essential developer and system fonts (`JetBrainsMono Nerd Font` and the IBM Plex family):
+Install JetBrainsMono Nerd Font and the IBM Plex family:
 
-Both font downloads use pinned releases for reproducible installs.
-Update the version in each URL when intentionally refreshing the fonts.
+Versions are pinned for reproducibility; update URLs to upgrade.
 
 ```shell
 sudo dnf install curl unzip fontconfig
@@ -36,27 +35,25 @@ sudo dnf install curl unzip fontconfig
 
 ## kmscon Font Family, Size and Color Scheme
 
-Fedora 45 installs `kmscon` by default and uses it for virtual
-terminals. Install its FreeType font backend and font tools:
+Fedora 45 includes and uses `kmscon` for virtual terminals. Install its
+FreeType backend and font tools:
 ```shell
 sudo dnf install kmscon-freetype freetype fontconfig
 ```
 
-If `rpm -q kmscon` reports that the base package is missing, add
-`kmscon` to the install command.
+If `rpm -q kmscon` reports it missing, add `kmscon` to the install command.
 
-After installing the fonts above, check the exact font family:
+Check the installed font family:
 ```shell
 fc-match 'JetBrainsMono Nerd Font Mono'
 ```
 
-Create the configuration directory:
+Create the config directory:
 ```shell
 sudo mkdir -p /etc/kmscon
 ```
 
-Add or update these options in `/etc/kmscon/kmscon.conf`,
-preserving any other existing settings:
+Add these options to `/etc/kmscon/kmscon.conf`; preserve other settings:
 ```ini
 font-engine=freetype
 font-name=JetBrainsMono Nerd Font Mono
@@ -89,39 +86,34 @@ palette-light-cyan=184,187,38
 palette-white=235,219,178
 ```
 
-This Gruvbox variant swaps the green and cyan color assignments and
-uses orange in place of yellow.
+This Gruvbox variant swaps green/cyan and uses orange instead of yellow.
 
-`font-name` selects the font family. `font-size` sets its height in
-pixels; increase it for larger text or decrease it for smaller text.
-Use an installed monospace font.
+`font-name` selects an installed monospace font; `font-size` sets its
+size in pixels.
 
-The changes apply to newly started kmscon instances. Save your work
-and reboot to apply them without restarting an active console session.
-Command-line font options override settings in the configuration file.
+Changes apply to new kmscon instances; reboot to apply them to active
+consoles. Command-line font options override this file.
 
 * **Troubleshoot Missing Fonts in Flatpak Applications (Optional):**
 
-  Standard host font directories are normally available automatically.
-  Restart the application after installing fonts.
+  Host fonts are normally available automatically. Restart the app.
 
-  If fonts are still missing, list application IDs:
+  If fonts are missing, list application IDs:
   ```shell
   flatpak list --app --columns=application
   ```
 
-  For fonts in your user font directory, try the following override.
-  Replace `APP_ID` with the affected application's ID:
+  For user fonts, replace `APP_ID` with the affected app ID:
   ```shell
   flatpak override --user --filesystem=xdg-data/fonts:ro APP_ID
   ```
 
-  For a custom font directory, grant access to its actual path instead:
+  For custom font paths, grant access to the actual path:
   ```shell
   flatpak override --user --filesystem=/absolute/path/to/fonts:ro APP_ID
   ```
 
-  Restart the application and check whether the fonts are available.
+  Restart the app and check the fonts.
 
 ---
 

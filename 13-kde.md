@@ -6,12 +6,10 @@
 
 1. **Reduce File Indexing (Optional):**
 
-   In System Settings, open File Search. Disable content indexing or
-   exclude directories containing build outputs, virtual machines,
-   and other frequently changing files.
+   In System Settings > File Search, disable content indexing or exclude
+   build outputs, virtual machines, and frequently changing directories.
 
-   If you do not use indexed file search in Dolphin or KRunner,
-   disable Baloo completely:
+   Disable Baloo if you do not need indexed search in Dolphin or KRunner:
    ```shell
    balooctl6 disable
    ```
@@ -22,17 +20,15 @@
    ```
 2. **Stop Akonadi If Unused (Optional):**
 
-   Skip this step if you use KMail, KOrganizer, KAddressBook, or other
-   applications that depend on Akonadi. Otherwise, close those
-   applications before stopping it:
+   Skip if you use KMail, KOrganizer, KAddressBook, or other Akonadi
+   apps. Close dependent apps before stopping it:
    ```shell
    akonadictl stop
    ```
 
-   This stops the current instance; it does not permanently disable
-   Akonadi. Applications that require it may start it again.
+   This stops the current instance only; dependent apps may restart it.
 
-   To start it manually:
+   Start it manually:
    ```shell
    akonadictl start
    ```

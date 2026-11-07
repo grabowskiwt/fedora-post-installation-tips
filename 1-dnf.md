@@ -4,7 +4,7 @@
 
 # 1. DNF Optimization
 
-To speed up package management, edit `/etc/dnf/dnf.conf` and ensure the `[main]` section contains the following settings:
+Add these settings to `[main]` in `/etc/dnf/dnf.conf`:
 
 ```ini
 [main]
@@ -20,8 +20,8 @@ ip_resolve=4
 color=always
 ```
 
-DNF reads the configuration on its next run; clearing the cache is not
-required. Only if you encounter stale or corrupted metadata, run:
+DNF uses the changes on its next run. Clear metadata only if it is stale
+or corrupted:
 ```shell
 sudo dnf clean metadata
 ```

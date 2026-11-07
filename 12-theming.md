@@ -27,32 +27,28 @@
    gsettings set org.gnome.desktop.interface font-name 'IBM Plex Sans 18'
    ```
 
-   Keep these values consistent with your GTK settings and Sway
-   dotfiles. In particular, use the same cursor theme and size in
+   Match GTK and Sway settings; use the same cursor theme and size in
    `seat * xcursor_theme` and the session environment.
 
 4. **Configure Native Qt Applications:**
 
-   Install the qt5ct and qt6ct packages from step 1, then open both tools:
+   Open both installed configuration tools:
    ```shell
    qt5ct
    qt6ct
    ```
 
-   Configure Tela-circle-green icons, IBM Plex Sans, and an available
-   dark style or color scheme in both tools.
+   Set Tela-circle-green icons, IBM Plex Sans, and a dark style in both.
 
-   Export these variables in your session launcher before starting Sway:
+   Export these variables in the Sway session launcher:
    ```shell
    export QT_QPA_PLATFORMTHEME=qt5ct
    export XCURSOR_THEME=breeze_cursors
    export XCURSOR_SIZE=32
    ```
 
-   The qt6ct plugin accepts `qt5ct` as a compatibility alias.
-   Updating the D-Bus activation environment alone does not export
-   these variables to applications launched directly by Sway.
-   Log out and back in after changing the session environment.
+   `qt6ct` accepts `qt5ct` as an alias. D-Bus environment updates alone
+   do not reach apps launched directly by Sway. Log out and back in.
 
 5. **Configure Flatpak Theming & Overrides:**
    ```shell
@@ -68,23 +64,20 @@
    flatpak override --user --unset-env=QT_QPA_PLATFORMTHEME
    ```
 
-   Keep native Qt configuration separate from Flatpak runtime plugins.
-   The command above prevents Flatpak applications from inheriting a
-   host platform theme plugin that may be unavailable in their runtime.
+   Keep host Qt settings separate from Flatpak runtime plugins; the
+   override prevents Flatpak apps inheriting an unavailable host plugin.
 
-   Install theme extension branches matching your applications' runtimes:
+   Check app runtimes and installed theme branches:
    ```shell
    flatpak list --app --columns=application,runtime
    flatpak list --runtime --columns=application,branch
    ```
 
-   Fedora's Sway portal configuration already selects GTK for settings
-   and WLR for screen capture. Avoid replacing it unless troubleshooting
-   a specific problem.
+   Fedora's Sway portals already use GTK for settings and WLR for capture;
+   change them only when troubleshooting.
 
-   Theme extensions must support the application's runtime branch.
-   The dark preference is communicated through the Settings portal;
-   applications may render it differently depending on their toolkit.
+   Match theme extensions to each app's runtime. Dark preference is sent
+   through the Settings portal and may vary by toolkit.
 
 ---
 

@@ -4,8 +4,8 @@
 
 # 4. Background Services Optimization
 
-Only disable features you do not use. A running service does not
-necessarily consume significant CPU time or battery power.
+Disable only unused features; running services do not necessarily use
+significant power.
 
 ## System Services (`sudo`)
 * **Disable Crash Reporting (ABRT):**
@@ -14,26 +14,22 @@ necessarily consume significant CPU time or battery power.
   ```
 * **Disable Cellular Modems & Smart Cards:**
 
-  Do not disable `pcscd` if you use a smart card, including a YubiKey's
-  PIV, OpenPGP, or OATH interface. FIDO2/WebAuthn security-key
-  authentication uses a different interface and does not require
-  `pcscd`.
+  Keep `pcscd` for smart cards or YubiKey PIV/OpenPGP/OATH. FIDO2/WebAuthn
+  does not require it.
 
   ```shell
   sudo systemctl disable --now ModemManager.service pcscd.socket pcscd.service
   ```
 * **Disable PackageKit (Optional):**
 
-  This disables PackageKit-based software management, including RPM
-  updates in KDE Discover. Keep updating RPM packages manually with
-  DNF. Wait for any active package transaction to finish first. This
-  note applies to KDE; Sway users may not have Discover installed.
+  Disables PackageKit software updates (including KDE Discover). Update
+  RPMs with DNF and wait for active transactions to finish first.
 
   ```shell
   sudo systemctl mask --now packagekit.service
   ```
 
-  To allow PackageKit to start again:
+  Re-enable PackageKit:
   ```shell
   sudo systemctl unmask packagekit.service
   ```
@@ -45,7 +41,7 @@ necessarily consume significant CPU time or battery power.
   ```
 * **Disable Accessibility APIs (Optional):**
 
-  Skip this step if you use a screen reader or other accessibility tools.
+  Skip if you use a screen reader or other accessibility tools.
   ```shell
   systemctl --user mask --now at-spi-dbus-bus.service
   ```

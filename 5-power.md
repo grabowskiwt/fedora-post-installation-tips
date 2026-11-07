@@ -4,19 +4,16 @@
 
 # 5. Power Management Configuration
 
-Choose one option: keep Fedora's TuneD setup or replace it with TLP.
-Do not apply both options.
+Choose TuneD or TLP; do not use both.
 
 ## Option 1: Keep TuneD and tuned-ppd
 
-If TuneD is already installed, keep it and skip the TLP installation.
-Ensure both services are enabled:
+Enable TuneD and tuned-ppd:
 ```shell
 sudo systemctl enable --now tuned.service tuned-ppd.service
 ```
 
-In Sway, select a power profile from the terminal.
-Run one of the following commands:
+Select a power profile in Sway:
 
 ```shell
 # Power saving
@@ -35,29 +32,27 @@ busctl --system set-property net.hadess.PowerProfiles \
   ActiveProfile s performance
 ```
 
-Check the selected power mode:
+Check the selected profile:
 ```shell
 busctl --system get-property net.hadess.PowerProfiles \
   /net/hadess/PowerProfiles net.hadess.PowerProfiles ActiveProfile
 ```
 
-- **Power Save:** prioritize lower power consumption on battery.
-- **Balanced:** start here for everyday use.
-- **Performance:** use when you need maximum performance.
+- **Power Save:** lower power use.
+- **Balanced:** everyday use.
+- **Performance:** maximum performance.
 
-Compare Power Save and Balanced with your actual workload; the lowest
-power setting does not necessarily use the least energy to finish a task.
+Compare profiles with your workload; the lowest-power profile may not
+use the least energy to finish a task.
 
-Check the active TuneD profile and list available profiles:
+Check active and available TuneD profiles:
 ```shell
 tuned-adm active
 tuned-adm list
 ```
 
-Desktop profile names are mapped to TuneD profiles through
-`/etc/tuned/ppd.conf`.
-Mappings and power use can vary by TuneD version and hardware; compare
-the available profiles with a repeatable workload on your own system.
+Mappings are in `/etc/tuned/ppd.conf`; behavior varies by version and
+hardware, so test profiles with a repeatable workload.
 
 ## Option 2: Replace TuneD with TLP
 
@@ -66,16 +61,11 @@ the available profiles with a repeatable workload on your own system.
    sudo dnf install --allowerasing tlp tlp-pd tlp-rdw
    ```
 
-   Review the transaction before confirming: conflicting power management
-   packages will be removed.
-   `tlp-pd` enables desktop profile switching; `tlp-rdw` enables automatic
-   radio device switching. Both packages are optional.
+   Review the transaction; conflicting power tools will be removed.
+   `tlp-pd` (desktop profiles) and `tlp-rdw` (radio switching) are optional.
 
-   TLP's defaults are a reasonable starting point for battery use:
-   `balance_power` for the CPU energy policy and `balanced` for the
-   platform profile, when supported by the hardware. `low-power` is the
-   default platform profile for TLP's `SAV` profile, not its normal
-   battery profile. Measure any additional changes on your own system.
+   Battery defaults are CPU `balance_power` and platform `balanced`, when
+   supported. `low-power` is for the `SAV` profile. Test other changes.
 
 2. **Enable TLP and Desktop Profile Switching:**
    ```shell
@@ -87,30 +77,20 @@ the available profiles with a repeatable workload on your own system.
    ```shell
    sudo systemctl mask systemd-rfkill.service systemd-rfkill.socket
    ```
-   TLP recommends this to avoid conflicts with radio-device state
-   handling. It is especially relevant when using `tlp-rdw`.
+   TLP recommends this for radio-device handling, especially with `tlp-rdw`.
 
 ## Avoid Conflicting Power Management Tools
 
-The installation command above removes conflicting Fedora power
-management packages. Do not run TLP alongside TuneD,
-power-profiles-daemon, or auto-cpufreq.
-
-`tlp-pd` is designed to work with TLP and provides desktop profile
-switching.
-
-TuneD and TLP do not manage display brightness or suspend policy.
-Configure those through your desktop environment or compositor, such
-as Sway.
+Do not run TLP alongside TuneD, power-profiles-daemon, or auto-cpufreq.
+TuneD and TLP do not manage brightness or suspend; configure these in
+your desktop or compositor, such as Sway.
 
 Reference: [TLP conflicts](https://linrunner.de/tlp/faq/conflicts.html).
 
 ## Thermal Management with thermald (Optional)
 
-On supported Intel laptops and PCs, thermald manages temperature.
-It is an optional thermal-management tool, not a battery-life
-optimization by itself. It complements TLP; it does not replace
-power-saving settings.
+Optional thermal management for supported Intel laptops and PCs;
+thermald does not improve battery life by itself or replace power settings.
 
 Install and enable it:
 ```shell
@@ -118,17 +98,16 @@ sudo dnf install thermald
 sudo systemctl enable --now thermald.service
 ```
 
-Check its status and startup messages:
+Check status and startup logs:
 ```shell
 systemctl status thermald.service --no-pager
 journalctl -u thermald.service -b --no-pager
 ```
 
-If the log reports unsupported hardware or firmware-managed thermal
-control, do not force thermald to run.
+If hardware is unsupported or thermal control is firmware-managed,
+disable thermald.
 
-When using custom CPU power limits, verify them under load with
-thermald active, since thermal management may adjust power limits.
+Thermald may adjust custom CPU limits; verify them under load.
 
 To disable it:
 ```shell
@@ -140,21 +119,20 @@ and [TLP compatibility](https://linrunner.de/tlp/faq/conflicts.html).
 
 ## Battery Charge Limits (Optional, TLP)
 
-Charge limits reduce battery wear; they do not increase runtime per
-charge. Check which thresholds your hardware supports:
+Charge limits reduce battery wear, not runtime per charge. Check supported
+thresholds:
 ```shell
 sudo tlp-stat -b
 ```
 
-If your battery supports both thresholds, configure them in
-`/etc/tlp.conf`. Example for BAT0:
+If supported, configure thresholds in `/etc/tlp.conf` (BAT0 example):
 ```ini
 START_CHARGE_THRESH_BAT0=75
 STOP_CHARGE_THRESH_BAT0=80
 ```
 
-Use the battery name and allowed values reported by `tlp-stat -b`.
-Some laptops support only a stop threshold or fixed threshold values.
+Use the battery name and values reported by `tlp-stat -b`; some laptops
+support only a stop threshold or fixed values.
 
 Apply and verify:
 ```shell
@@ -177,19 +155,15 @@ and [hardware-specific support](https://linrunner.de/tlp/settings/bc-vendors.htm
 
 ## Quiet Laptop Setup: TLP, Power Limits and thinkfan
 
-Use TuneD and tuned-ppd for the desktop PC.
-For a laptop, choose the TLP installation above instead of TuneD.
+Use TuneD on a desktop PC and TLP on a laptop.
 
-In my tests, a custom fan curve was quieter than firmware control.
-Results depend on the laptop, cooling system, and workload.
-The 10/15 W limits and fan curve below are examples to adapt and test,
-not universal settings for every laptop.
-The power and fan measurements below were taken with TuneD Balanced
-active. They are not measurements of the TLP configuration described
-above; verify that setup separately on your laptop.
+My tests found a custom fan curve quieter than firmware control; results
+vary by hardware and workload. The 10/15 W limits and curve are examples,
+not universal settings. Measurements used TuneD Balanced, not TLP; test
+the TLP setup separately.
 
-Allow Turbo Boost on AC and battery, but keep it disabled in the
-power-saver (SAV) profile, by setting these values in `/etc/tlp.conf`:
+In `/etc/tlp.conf`, enable Turbo Boost on AC and battery, but disable it
+in the power-saver (SAV) profile:
 ```ini
 CPU_BOOST_ON_AC=1
 CPU_BOOST_ON_BAT=1
@@ -203,17 +177,13 @@ sudo tlp start
 
 ### Persist Laptop CPU Power Limits (Intel RAPL Example)
 
-This example requires a writable Intel RAPL CPU package interface.
-For AMD or other hardware, use the interface supported by that CPU.
-The example 10/15 W limits apply on both battery and AC power. They can
-reduce performance under heavy load while plugged in; select values
-appropriate for your processor before enabling the service. To use
-different limits on battery and AC, configure and test a separate
-power-source-aware rule.
-This limits CPU package power, not the entire laptop's power consumption.
-Values are in microwatts; 10/15 W are examples, not manufacturer
-recommendations. Compare responsiveness, task completion time, temperature,
-and battery discharge rate with your chosen limits.
+Requires a writable Intel RAPL CPU package interface; use the supported
+interface on other hardware. These example limits (10/15 W) apply on AC
+and battery, limit CPU package rather than whole-system power, and may
+reduce performance under load on AC. Use suitable values; for different
+AC and battery limits, configure and test a power-source-aware rule.
+Values are in microwatts, not manufacturer recommendations. Compare
+responsiveness, task time, temperature, and battery discharge rate.
 
 First inspect the available RAPL zones and constraints:
 ```shell
@@ -229,16 +199,16 @@ for zone in /sys/class/powercap/intel-rapl:*; do
 done
 ```
 
-For the following example, confirm that `intel-rapl:0` is the CPU
-package, constraint 0 is `long_term`, and constraint 1 is `short_term`.
+Confirm `intel-rapl:0` is the CPU package, constraint 0 is `long_term`,
+and constraint 1 is `short_term`.
 
-Before enabling the persistent service, record your original limits:
+Record the original limits before enabling the service:
 ```shell
 cat /sys/class/powercap/intel-rapl:0/constraint_0_power_limit_uw
 cat /sys/class/powercap/intel-rapl:0/constraint_1_power_limit_uw
 ```
 
-Create `/etc/systemd/system/laptop-power-limits.service`:
+Create the service at `/etc/systemd/system/laptop-power-limits.service`:
 ```ini
 [Unit]
 Description=Apply laptop CPU package power limits
@@ -255,7 +225,7 @@ ExecStart=/bin/sh -ec 'echo 10000000 > /sys/class/powercap/intel-rapl:0/constrai
 WantedBy=multi-user.target
 ```
 
-Create `/usr/lib/systemd/system-sleep/laptop-power-limits`:
+Create the resume hook at `/usr/lib/systemd/system-sleep/laptop-power-limits`:
 ```sh
 #!/bin/sh
 if [ "$1" = post ]; then
@@ -263,45 +233,41 @@ if [ "$1" = post ]; then
 fi
 ```
 
-Enable the resume hook and startup service:
+Enable the hook and service:
 ```shell
 sudo chmod 755 /usr/lib/systemd/system-sleep/laptop-power-limits
 sudo systemctl daemon-reload
 sudo systemctl enable --now laptop-power-limits.service
 ```
 
-Verify after installation, reboot, and suspend/resume:
+Verify after setup, reboot, and resume:
 ```shell
 cat /sys/class/powercap/intel-rapl:0/constraint_0_power_limit_uw
 cat /sys/class/powercap/intel-rapl:0/constraint_1_power_limit_uw
 cat /sys/devices/system/cpu/intel_pstate/no_turbo
 ```
 
-Expected values: `10000000`, `15000000`, and `0` respectively on AC
-and battery. In the TLP power-saver (SAV) profile, `no_turbo` is
-expected to be `1`.
-The service manages power limits; TLP manages Turbo Boost.
-Firmware may still override limits, so verify them.
+Expect `10000000`, `15000000`, and `no_turbo=0` on AC and battery;
+`no_turbo=1` in TLP SAV. The service sets power limits and TLP controls
+Turbo Boost. Firmware may override limits.
 
-To remove automatic power limiting:
+Disable automatic limiting:
 ```shell
 sudo systemctl disable --now laptop-power-limits.service
 sudo chmod -x /usr/lib/systemd/system-sleep/laptop-power-limits
 ```
 
-Disabling the service does not restore the previous power limits.
-Write the recorded original values back to the corresponding sysfs
-files, or reboot after disabling both automatic mechanisms.
+Disabling the service does not restore previous limits. Restore the
+recorded values in sysfs, or reboot after disabling both mechanisms.
 
 ## Laptop Fan Control (Optional, Compatible Hardware Only)
 
-This example requires the thinkpad_acpi fan interface and a coretemp
-CPU package sensor. It is not a universal laptop fan configuration.
-On other hardware, use a supported fan-control interface or firmware
-control. Include dedicated GPU sensors when the cooling system is shared.
+Requires the `thinkpad_acpi` fan interface and a `coretemp` CPU package
+sensor. Other hardware needs a supported interface or firmware control;
+include GPU sensors if cooling is shared.
 
-First test the CPU power limits with firmware-controlled cooling.
-If fan behavior is still unsatisfactory, try thinkfan:
+Test power limits with firmware cooling first. If needed, install and
+check thinkfan:
 ```shell
 sudo dnf install thinkfan lm_sensors
 sensors
@@ -313,7 +279,7 @@ Enable fan control in `/etc/modprobe.d/99-thinkfan.conf`:
 options thinkpad_acpi fan_control=1
 ```
 
-Reboot before continuing.
+Reboot.
 
 Check the CPU sensor labels:
 ```shell
@@ -324,9 +290,8 @@ for hwmon in /sys/class/hwmon/hwmon*; do
 done
 ```
 
-The example below requires `coretemp` sensor index 1 to represent
-the CPU package temperature. Confirm this in `temp1_label`.
-Back up any existing thinkfan configuration before replacing it.
+Confirm `coretemp` index 1 is the CPU package in `temp1_label`. Back up
+any existing configuration before replacing it.
 
 Create `/etc/thinkfan.yaml`:
 ```yaml
@@ -347,28 +312,23 @@ levels:
   - [7, 77, 32767]
 ```
 
-These temperature thresholds are experimental starting values.
-The fan starts above approximately 50°C and stops below 45°C.
-Overlapping thresholds provide hysteresis to reduce repeated speed
-changes. The CPU package sensor does not cover every component in the
-laptop; compare temperatures and behavior with firmware-controlled cooling.
+Thresholds are experimental: the fan starts near 50°C and stops below
+45°C; overlap reduces repeated speed changes. The CPU sensor does not
+cover every component, so monitor temperatures and compare with firmware.
 
-Stop any existing thinkfan service and test in the foreground:
+Stop any running thinkfan service and test it in the foreground:
 ```shell
 sudo systemctl stop thinkfan.service
 sudo thinkfan -n -c /etc/thinkfan.yaml
 ```
 
-Monitor temperatures and fan speed with `sensors` in another terminal,
-both at idle and during your normal heavy workloads.
-After observing the fan and temperatures at idle and under load, stop
-the foreground process with Ctrl+C. If the curve behaves safely and
-quietly, enable the service in a separate command:
+Monitor temperatures and fan speed at idle and under load. Stop with
+Ctrl+C; if the curve is safe and quiet, enable the service:
 ```shell
 sudo systemctl enable --now thinkfan.service
 ```
 
-To return to firmware-controlled cooling:
+Restore firmware fan control:
 ```shell
 sudo systemctl disable --now thinkfan.service
 echo 'level auto' | sudo tee /proc/acpi/ibm/fan
@@ -385,16 +345,15 @@ sudo tlp-stat -s
 sudo tlp-stat -b
 ```
 
-For additional diagnostics, install and run PowerTOP:
+Install and run PowerTOP for diagnostics:
 ```shell
 sudo dnf install powertop
 sudo powertop
 ```
 
-Measure on battery power after background activity has settled.
-Keep screen brightness, refresh rate, network conditions, and workload
-the same between tests. Compare idle usage and a repeatable workload,
-such as playing the same video. Change one setting at a time.
+Measure on battery after background activity settles. Keep brightness,
+refresh rate, network, and workload constant; compare idle and repeatable
+loads, changing one setting at a time.
 
 Use PowerTOP for observation. Do not run `powertop --auto-tune`
 alongside TLP, as they can overwrite each other's settings.

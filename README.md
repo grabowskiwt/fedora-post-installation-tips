@@ -1,6 +1,8 @@
 # Fedora Post-Installation Tips & Optimization Guide
 
-After installing Fedora, there are several steps you can take to further enhance the functionality, performance, and usability of your system. This repository provides a guide to DNF optimization, RPM Fusion codecs, hardware acceleration, the Devario kernel and SCX scheduler, background services, TuneD and TLP power management, Secure Boot with `sbctl`, fonts, Zsh, and system theming. KDE-specific guidance is kept in an optional final chapter.
+Personal Fedora 45 setup notes for Sway: Secure Boot, DNF, codecs,
+kernel/scheduler, services, power, firmware, tools, fonts, shell, and theming.
+KDE guidance is in the optional final chapter.
 
 ## Scope
 

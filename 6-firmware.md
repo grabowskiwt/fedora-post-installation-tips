@@ -4,7 +4,7 @@
 
 # 6. Firmware Updates
 
-Keep your device firmware and hardware up to date using `fwupdmgr`:
+Check for and install firmware updates with `fwupdmgr`:
 
 ```shell
 sudo fwupdmgr get-devices 

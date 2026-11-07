@@ -4,21 +4,19 @@
 
 # 11. SDDM Login Manager Configuration
 
-This section is optional. Sway can be started from a TTY or another
-login manager; SDDM is not required.
+Optional: Sway can start from a TTY or another display manager.
 
-If you want to use SDDM as your graphical login manager, install it:
+Install SDDM:
 ```shell
 sudo dnf install sddm
 ```
 
-If another display manager is enabled, disable it before enabling SDDM.
-Enable SDDM for the next boot:
+Disable any other display manager, then enable SDDM:
 ```shell
 sudo systemctl enable sddm.service
 ```
 
-After rebooting, select the Sway session on the login screen.
+After reboot, select Sway at the login screen.
 
 ---
 

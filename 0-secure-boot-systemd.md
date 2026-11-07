@@ -12,66 +12,58 @@ sudo dnf install sbctl
 
 ## **Enter Setup Mode in UEFI (BIOS)**
 
-This section only configures Secure Boot signing for an existing
-systemd-boot installation. Fedora normally installs GRUB; this guide
-does not install or convert the bootloader. Confirm that systemd-boot
-is installed and identify the active boot files before proceeding:
+For an existing systemd-boot setup only; this guide does not install or
+convert Fedora's default GRUB bootloader. Identify the active boot files:
 ```shell
 bootctl status
 bootctl list
 lsblk -o NAME,FSTYPE,UUID,MOUNTPOINTS
 ```
-Continue only if `bootctl status` identifies systemd-boot as the
-currently used bootloader; a systemd-boot file on the ESP alone does
-not mean the system boots through it.
+Continue only if `bootctl status` shows systemd-boot as the active
+bootloader; its presence on the ESP alone is not sufficient.
 
-The ESP and kernel image paths depend on the system's boot layout.
-Do not assume that the kernel image is at `/boot/vmlinuz-*` or that
-the ESP is mounted at `/boot/efi`.
+ESP and kernel paths vary; do not assume `/boot/vmlinuz-*` or
+`/boot/efi`.
 
-Enter your firmware's Secure Boot settings and follow the vendor's
-procedure for entering Setup Mode. This normally requires removing
-the Platform Key (PK); disabling Secure Boot alone is not sufficient.
-Menu names vary between devices.
+Use the vendor's firmware procedure to enter Setup Mode, normally by
+removing the Platform Key (PK). Disabling Secure Boot alone is not
+enough; menu names vary by device.
 
-Before changing keys, confirm how to restore the factory keys.
-If Windows uses BitLocker or device encryption, have its recovery
-key available before changing Secure Boot settings.
+Before changing keys, know how to restore factory keys. Have the
+BitLocker/device-encryption recovery key available if applicable.
 
 Boot Linux again and check:
 ```shell
 sbctl status
 ```
 
-Confirm that Setup Mode is enabled before enrolling your keys.
+Confirm Setup Mode before enrolling keys.
 
 ## **Create and Enroll Keys:**
 ```shell
 sudo sbctl create-keys
 sudo sbctl enroll-keys -m
 ```
-*(The `-m` flag also registers Microsoft keys required for Windows dual-boot).*
+(`-m` also enrolls Microsoft keys for Windows dual-boot.)
 
 ## **Sign the Active Bootloader and Kernel Images:**
 
-Use `bootctl status`, `bootctl list`, and the ESP mount points to
-identify the EFI executables used by the boot entries. Review the
-unsigned files reported by `sbctl verify`; sign only the boot files
-you have identified. Replace each example path with its actual path:
+Use `bootctl status`, `bootctl list`, ESP mount points, and `sbctl verify`
+to identify unsigned boot files. Replace example paths and sign only
+the files used by your boot entries:
 ```shell
 sudo sbctl sign --save /actual/path/to/systemd-bootx64.efi
 sudo sbctl sign --save /actual/path/to/kernel-image
 sudo sbctl sign-all
 ```
 
-`sign-all` re-signs files already saved in sbctl's database. It does
-not discover a new versioned kernel path after a kernel update; inspect
-`sbctl verify` and save any new boot image path before relying on it.
+`sign-all` re-signs saved files; it does not discover new versioned
+kernel paths. After updates, inspect `sbctl verify` and save new paths.
 
 ## **Verify Status:**
 
-Reboot and enable Secure Boot in UEFI after enrolling the keys and
-signing the boot files.
+After enrolling keys and signing boot files, enable Secure Boot in UEFI
+and reboot.
 
 ```shell
 sbctl status
@@ -79,22 +71,18 @@ sudo sbctl verify
 ```
 *(Expected output: `Secure Boot: Enabled`)*
 
-After installing a new kernel or updating the bootloader, check
-`sudo sbctl verify` and sign any newly installed boot files before
-booting them with Secure Boot enabled. Run `sudo sbctl verify` again
-to confirm the signatures.
+After kernel or bootloader updates, verify and sign new files before
+booting with Secure Boot enabled; verify signatures again.
 
 ## **Showing Windows entry from another drive while dual-booting:**
 
-List partitions and identify the Windows EFI System Partition:
+Identify the Windows EFI System Partition:
 ```shell
 sudo fdisk -l
 ```
 
-Mount it read-only and copy the Microsoft EFI boot files.
-Replace the example device with the Windows EFI System Partition.
-Use the actual mount point of the systemd-boot ESP shown by
-`bootctl status` and `lsblk` in place of `/path/to/esp`:
+Mount it read-only and copy its Microsoft boot files. Replace the
+example device and `/path/to/esp` with your actual partitions/mount point:
 ```shell
 sudo mkdir -p /mnt/winefi
 sudo mount -o ro /dev/nvme0n1p2 /mnt/winefi
@@ -103,8 +91,7 @@ sudo umount /mnt/winefi
 sudo rmdir /mnt/winefi
 ```
 
-This creates a separate copy. Windows updates on the original ESP
-will not automatically update the copied files.
+This copy will not receive Windows boot-file updates automatically.
 
 ---
 
